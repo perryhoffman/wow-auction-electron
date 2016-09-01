@@ -1,25 +1,25 @@
 // Install
 
-if(require('electron-squirrel-startup')) return;
+if (require('electron-squirrel-startup')) return
 
 // App
 
 const electron = require('electron')
 const app = electron.app
 
-app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
+app.commandLine.appendSwitch('ignore-certificate-errors', 'true')
 
 const BrowserWindow = electron.BrowserWindow
-
 
 let mainWindow
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 1024, height: 760})
   
+  mainWindow = new BrowserWindow({width: 1024, height: 760})
+
   BrowserWindow.addDevToolsExtension('C:\\Users\\Alex Cheuk\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\2.1.2_0')
   // mainWindow.loadURL(`file://${__dirname}/index.html`);
-  mainWindow.loadURL(`http://localhost:8080`);
+  mainWindow.loadURL(`http://localhost:8080`)
 
   mainWindow.on('closed', function () {
     mainWindow = null
@@ -38,5 +38,34 @@ app.on('activate', function () {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+// APPLICATION
+
+let loginWindow = null
+let loginInterval = null
+
+function showLoginPopup () {
+  loginWindow = new BrowserWindow({width: 1024, height: 760, frame: false})
+  loginWindow.loadURL('https://us.battle.net/login/en/')
+
+  loginWindow.on('closed', () => {
+    clearInterval(loginInterval)
+    loginWindow = null
+  })
+
+  loginInterval = setInterval(function () {
+    let url = loginWindow.getURL()
+
+    if (/account\/management/.test(url.split('?')[0])) {
+      loginWindow.close()
+
+      mainWindow.webContents.send('login-success')
+    }
+  }, 500)
+}
+
+electron.ipcMain.on('login-popup', (event, arg) => {
+  showLoginPopup()
 })
 

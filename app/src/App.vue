@@ -1,63 +1,43 @@
 <template>
   <div id="app">
-    <img class="logo" src="./assets/logo.png">
-    <hello></hello>
-    <p>
-      Welcome to your Vue.js app!
-    </p>
-    <p>
-      <button v-on:click="open()">Open</button>
-    </p>
+    <header-component></header-component>
+    <div class="items-container content">
+      <div class="ui stackable four column grid ">
+        <item-card></item-card>
+        <item-card></item-card>
+        <item-card></item-card>
+        <item-card></item-card>
+        <item-card></item-card>
+        <item-card></item-card>
+        <item-card></item-card>
+        <item-card></item-card>
+        <item-card></item-card>
+      </div>
+    </div>
+    <footer-component></footer-component>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
-// import electron from 'electron'
+import '../node_modules/jquery/dist/jquery.js'
+import '../node_modules/semantic-ui/dist/semantic.js'
+import HeaderComponent from './components/Header'
+import FooterComponent from './components/Footer'
+import ItemCard from './components/ItemCard'
 
 export default {
   components: {
-    Hello
-  },
-  methods: {
-    open: () => {
-      let login = window.open('https://us.battle.net/login/en/', 'Login to Battle.net', 'autoHideMenuBar=yes')
-      login.eval('console.log(window)', function () {
-        console.log('ha')
-      })
-    }
+    HeaderComponent,
+    FooterComponent,
+    ItemCard
   }
 }
 </script>
 
 <style>
-  
-html {
-  height: 100%;
-}
+@import '../node_modules/semantic-ui/dist/semantic.css';
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-#app {
-  color: #2c3e50;
-  margin-top: -100px;
-  max-width: 600px;
-  font-family: Source Sans Pro, Helvetica, sans-serif;
-  text-align: center;
-}
-
-#app a {
-  color: #42b983;
-  text-decoration: none;
-}
-
-.logo {
-  width: 100px;
-  height: 100px;
+.items-container{
+  padding: 25px;
 }
 </style>

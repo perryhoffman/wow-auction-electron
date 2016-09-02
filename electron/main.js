@@ -3,7 +3,6 @@
 if (require('electron-squirrel-startup')) return
 
 // App
-
 const electron = require('electron')
 const app = electron.app
 
@@ -14,16 +13,32 @@ const BrowserWindow = electron.BrowserWindow
 let mainWindow
 
 function createWindow () {
-  
-  mainWindow = new BrowserWindow({width: 1024, height: 760})
+  mainWindow = new BrowserWindow({
+    width: 1400,
+    height: 860,
+    webPreferences: {
+      webSecurity: false
+    }
+  })
 
   BrowserWindow.addDevToolsExtension('C:\\Users\\Alex Cheuk\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\2.1.2_0')
+  require('devtron').install()
+
   // mainWindow.loadURL(`file://${__dirname}/index.html`);
   mainWindow.loadURL(`http://localhost:8080`)
 
   mainWindow.on('closed', function () {
     mainWindow = null
   })
+
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.on('devtools-opened', () => {
+      setImmediate(() => {
+        mainWindow.focus()
+      })
+    })
+    mainWindow.openDevTools()
+  }
 }
 
 app.on('ready', createWindow)
@@ -41,12 +56,15 @@ app.on('activate', function () {
 })
 
 // APPLICATION
-
 let loginWindow = null
 let loginInterval = null
 
 function showLoginPopup () {
-  loginWindow = new BrowserWindow({width: 1024, height: 760, frame: false})
+  loginWindow = new BrowserWindow({
+    width: 1024,
+    height: 760,
+    frame: false
+  })
   loginWindow.loadURL('https://us.battle.net/login/en/')
 
   loginWindow.on('closed', () => {
@@ -68,4 +86,3 @@ function showLoginPopup () {
 electron.ipcMain.on('login-popup', (event, arg) => {
   showLoginPopup()
 })
-

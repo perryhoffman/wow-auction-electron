@@ -7,7 +7,7 @@
                 <div class="sub header">You Have: 5</div>
             </h5>
         </div>
-        <div class="ui dropdown icon item right">
+        <div class="ui top pointing dropdown icon item right">
             <i class="setting icon"></i>
             <div class="menu">
                 <div class="item">Comfortable</div>

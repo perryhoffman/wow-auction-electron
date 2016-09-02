@@ -38,22 +38,30 @@
 </template>
 
 <style>
-    .footer{
-        color:#fff;
-        font-weight: 300;
-    }
+.footer{
+    color:#fff;
+    font-weight: 300;
+}
 
-    .financial-info{
-        float:left;
-    }
+.financial-info{
+    float:left;
+}
 
-    .financial-info + .financial-info{
-        margin-left: 2.5em;
-    }
+.financial-info + .financial-info{
+    margin-left: 2.5em;
+}
 </style>
 
 <script>
 import {ipcRenderer} from 'electron'
+import $ from 'jquery'
+
+$.ajax('http://us.battle.net/wow/en/character/kelthuzad/Ragedmonkey/simple')
+  .then(function (res) {
+    let el = $(res)
+
+    console.log(el.find('.username').text())
+  })
 
 export default {
   methods: {

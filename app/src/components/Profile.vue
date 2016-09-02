@@ -1,56 +1,161 @@
 <template>
-  <div class="ui primary button" v-on:click="openLogin()" v-if="!loggedIn">Log in to Battle.net</div>
-  <div class="ui basic button inverted" v-if="loggedIn" v-text="character"></div>
+<div class="left menu">
+  <div class="item">
+    <div class="ui primary button" v-on:click="openLogin()" v-show="!currentCharacter">Log in to Battle.net</div>
+    <div class="ui top pointing dropdown basic button inverted" v-show="currentCharacter">
+      <span class="text" v-text="currentCharacter"></span>
+      <div class="ui secondary vertical pointing menu">
+        <a class="teal item" v-for="(index, character) in characters" v-on:click="selectCharacter(character, index)" :class="{'active': character.active}">
+          <h5 class="ui header" :class="{'teal': character.active}">
+            {{character.name}}
+            <div class="sub header">{{character.desc}}</div>
+          </h5>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="item">
+    <h6 class="ui header inverted left floated">
+      GOLD
+      <div class="sub header">
+        <gold :gold="money.gold" :silver="money.silver" :copper="money.copper"></gold>
+      </div>
+    </h6>
+  </div>
+  <div class="item">
+    <h6 class="ui header inverted left floated">
+      EARNED
+      <div class="sub header">
+        <gold :gold="earned.gold" :silver="earned.silver" :copper="earned.copper"></gold>
+      </div>
+    </h6>
+  </div>
+  <div class="item">
+    <h6 class="ui header inverted left floated">
+      TOTAL
+      <div class="sub header">
+        <gold :gold="totalGold.gold" :silver="totalGold.silver" :copper="totalGold.copper"></gold>
+      </div>
+    </h6>
+  </div>
 </div>
 </template>
 
 <style>
-.footer{
-  color:#fff;
-  font-weight: 300;
-}
-
-.financial-info{
-  float:left;
-}
-
-.financial-info + .financial-info{
-  margin-left: 2.5em;
-}
 </style>
 
 <script>
 import {ipcRenderer} from 'electron'
+import Gold from './Gold'
+import utils from '../services/utils'
 import $ from 'jquery'
 
 const API_URL = 'https://us.battle.net/wow/en/vault/character/auction/'
+const API_SET_PREF_URL = 'https://us.battle.net/wow/en/pref/character'
+const API_MONEY_URL = 'https://us.battle.net/wow/en/vault/character/auction/money'
 
 export default {
   data () {
     return {
-      loggedIn: false,
-      character: 'None'
+      xstoken: null,
+      money: {},
+      earned: {},
+      totalGold: {},
+      currentCharacter: null,
+      characters: []
     }
   },
+  components: {
+    Gold
+  },
   ready () {
-    $.ajax({
-      type: 'GET',
-      url: API_URL
+    // Initial Dropdown
+    $(this.$el).find('.dropdown').dropdown({
+      action: 'hide'
     })
-    .then((res) => {
-      let el = $(res)
 
-      el.find('.character-list .primary a.char').each((index, el) => {
-        console.log($(el).attr('href'))
-      })
+    this.fetchProfile()
+    this.fetchInterval = setInterval(() => {
+      this.fetchProfile()
+    }, 5000)
 
-      this.loggedIn = true
-      this.character = el.find('.character-name').text()
-    })
+    this.fetchMoney()
+    this.moneyInterval = setInterval(() => {
+      this.fetchMoney()
+    }, 5000)
+  },
+  beforeDestroy () {
+    clearInterval(this.fetchInterval)
+    clearInterval(this.moneyInterval)
   },
   methods: {
     openLogin () {
       ipcRenderer.send('login-popup')
+    },
+    getCurrentCharacter ($html) {
+      this.currentCharacter = $html.find('.character-name').text()
+      return this.currentCharacter
+    },
+    getCharacterList ($html) {
+      this.characters = []
+
+      $html.find('.character-list .primary a.char').each((index, el) => {
+        var $el = $(el)
+
+        this.characters.push({
+          name: $el.find('.name').text(),
+          desc: $el.find('.class').text(),
+          realm: $el.find('.realm').text(),
+          href: $el.attr('href'),
+          active: $el.hasClass('pinned')
+        })
+      })
+
+      return this.characters
+    },
+    getXstoken ($html) {
+      this.xstoken = $html.find('body').html().match(/var xsToken = '(.*)';/)[1]
+    },
+    scrapeProfile ($html) {
+      this.getCurrentCharacter($html)
+      this.getCharacterList($html)
+      this.getXstoken($html)
+
+      return $html
+    },
+    fetchProfile () {
+      $.ajax({
+        type: 'GET',
+        url: API_URL
+      })
+      .then((html) => {
+        return $(html)
+      })
+      .then(this.scrapeProfile)
+    },
+    fetchMoney () {
+      $.ajax({
+        type: 'GET',
+        url: API_MONEY_URL
+      })
+      .then((res) => {
+        this.money = utils.extractMoney(res.money)
+      })
+    },
+    selectCharacter (character, index) {
+      $.ajax({
+        type: 'POST',
+        url: API_SET_PREF_URL,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        data: {
+          index,
+          xstoken: this.xstoken
+        }
+      }).then((res) => {
+        this.currentCharacter = character.name
+      })
     }
   }
 }

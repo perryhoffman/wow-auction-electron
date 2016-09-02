@@ -2,16 +2,8 @@
   <div id="app">
     <header-component></header-component>
     <div class="items-container content">
-      <div class="ui stackable four column grid ">
-        <item-card></item-card>
-        <item-card></item-card>
-        <item-card></item-card>
-        <item-card></item-card>
-        <item-card></item-card>
-        <item-card></item-card>
-        <item-card></item-card>
-        <item-card></item-card>
-        <item-card></item-card>
+      <div class="ui stackable four column grid">
+        <item-card v-for="item in items"></item-card>
       </div>
     </div>
     <footer-component></footer-component>
@@ -26,6 +18,11 @@ import FooterComponent from './components/Footer'
 import ItemCard from './components/ItemCard'
 
 export default {
+  data () {
+    return {
+      items: [1, 2, 3, 4]
+    }
+  },
   components: {
     HeaderComponent,
     FooterComponent,

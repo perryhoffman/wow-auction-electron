@@ -21,7 +21,7 @@ function createWindow () {
     }
   })
 
-  BrowserWindow.addDevToolsExtension('C:\\Users\\Alex Cheuk\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\2.1.2_0')
+  // BrowserWindow.addDevToolsExtension('C:\\Users\\Alex Cheuk\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\2.1.2_0')
   require('devtron').install()
 
   // mainWindow.loadURL(`file://${__dirname}/index.html`);

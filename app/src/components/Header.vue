@@ -1,42 +1,60 @@
 <template>
-    <div class="ui small borderless menu menu--header">
-        <div class="ui container">
-            <a href="#" class="header item">
-                <img class="logo" src="../assets/logo.png">
-                AUTOTIONEER
+  <div class="ui small borderless menu menu--header">
+    <div class="ui container">
+      <a href="#" class="header item">
+        <img class="logo" src="../assets/logo.png">
+        AUTOTIONEER
+      </a>
+      <div class="right menu">
+        <div class="item">
+          <div class="ui orange button">Auto Buy</div>
+
+          <div class="ui purple button">Inventory</div>
+
+          <div class="ui labeled button" tabindex="0">
+            <div class="ui primary button small">Auction</div>
+            <a class="ui basic left pointing label">
+            0
             </a>
-            <div class="right menu">
-                <div class="item">
-                    <div class="ui orange button">Auto Buy</div>
+          </div>
 
-                    <div class="ui purple button">Inventory</div>
-
-                    <div class="ui labeled button" tabindex="0">
-                    <div class="ui primary button small">Auction</div>
-                    <a class="ui basic left pointing label">
-                        0
-                    </a>
-                    </div>
-
-                    <div class="ui labeled button" tabindex="0">
-                    <div class="ui teal button small">History</div>
-                    <a class="ui basic left pointing label">
-                        0
-                    </a>
-                    </div>
-                    <div class="ui primary button">Track an Item</div>
-                </div>
-            </div>
+          <div class="ui labeled button" tabindex="0">
+            <div class="ui teal button small">History</div>
+            <a class="ui basic left pointing label">
+            0
+            </a>
+          </div>
+          <div class="ui primary button" v-on:click="openAddItemModal()">Track an Item</div>
         </div>
+      </div>
     </div>
+  </div>
+  <add-item-modal v-ref:addItemModal></add-item-modal>
 </template>
 
 <style>
-    .ui.menu--header .item img.logo {
-        margin-right: 1.5em;
-    }
+.ui.menu--header .item img.logo {
+    margin-right: 1.5em;
+}
 
-    .ui.menu--header .item .button+ .button {
-        margin-left: 1em;
-    }
+.ui.menu--header .item .button+ .button {
+    margin-left: 1em;
+}
 </style>
+
+<script>
+import AddItemModal from './modals/AddItemModal'
+
+export default {
+  ready () {
+  },
+  methods: {
+    openAddItemModal () {
+      this.$refs.additemmodal.open()
+    }
+  },
+  components: {
+    AddItemModal
+  }
+}
+</script>

@@ -2,25 +2,19 @@
 <div class="ui basic modal">
   <i class="close icon"></i>
   <div class="header">
-    Archive Old Messages
+    Track An Item
   </div>
-  <div class="image content">
-    <div class="image">
-      <i class="archive icon"></i>
-    </div>
-    <div class="description">
-      <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
-    </div>
+  <div class="content">
+    <form class="ui inverted form">
+      <div class="field">
+        <input type="text" placeholder="eg. Spirit of War">
+      </div>
+    </form>
   </div>
   <div class="actions">
-
-    <div class="ui cancel red basic inverted button">
-      <i class="remove icon"></i>
-      No
-    </div>
     <div class="ui ok green basic inverted button">
       <i class="checkmark icon"></i>
-      Yes
+      Submit
     </div>
 
   </div>

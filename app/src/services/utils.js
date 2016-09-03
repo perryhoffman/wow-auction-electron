@@ -13,5 +13,8 @@ export default {
       silver: silver,
       copper: copper
     }
+  },
+  getFullAmount ({gold, silver, copper}) {
+    return (gold * 10000) + (silver * 100) + copper
   }
 }

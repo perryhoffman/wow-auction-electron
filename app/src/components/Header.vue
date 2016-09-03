@@ -3,7 +3,7 @@
     <div class="ui container">
       <a href="#" class="header item">
         <img class="logo" src="../assets/logo.png">
-        AUTOTIONEER
+        AUCTIONEER
       </a>
       <div class="right menu">
         <div class="item">

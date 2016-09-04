@@ -3,7 +3,7 @@
     <header-component></header-component>
     <div class="items-container content">
       <div class="ui stackable four column grid">
-        <item-card v-for="item in items"></item-card>
+        <item-card v-for="item in tracked_items" :item="item"></item-card>
       </div>
     </div>
     <footer-component></footer-component>
@@ -18,15 +18,15 @@ import FooterComponent from './components/Footer'
 import ItemCard from './components/ItemCard'
 
 export default {
-  data () {
-    return {
-      items: [1, 2, 3, 4]
-    }
-  },
   components: {
     HeaderComponent,
     FooterComponent,
     ItemCard
+  },
+  vuex: {
+    getters: {
+      tracked_items: state => state.tracker.tracked_items
+    }
   }
 }
 </script>

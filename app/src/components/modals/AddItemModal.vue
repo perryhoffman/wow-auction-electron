@@ -5,33 +5,59 @@
     Track An Item
   </div>
   <div class="content">
-    <form class="ui inverted form">
-      <div class="field">
-        <input type="text" placeholder="eg. Spirit of War">
+    <div class="ui fluid search">
+      <div class="ui fluid icon input">
+        <input class="prompt" type="text" placeholder="eg. Spirit of War">
+        <i class="search icon"></i>
       </div>
-    </form>
-  </div>
-  <div class="actions">
-    <div class="ui ok green basic inverted button">
-      <i class="checkmark icon"></i>
-      Submit
+      <div class="results"></div>
     </div>
-
   </div>
 </div>
 </template>
 
 <style>
-
+.ui.fluid.search{
+  width: 100%;
+}
 </style>
 
 <script>
 import $ from 'jquery'
+import itemsXHR from '../../services/items.db'
+import * as types from '../../vuex/mutation-types'
 
 export default {
+  ready () {
+    itemsXHR.then(items => {
+      $(this.$el).find('.ui.search').search({
+        source: items,
+        searchFields: ['name'],
+        minCharacters: 3,
+        fields: {
+          title: 'name'
+        },
+        searchFullText: true,
+        onSelect: (result) => {
+          this.addTrackItem(result)
+          this.close()
+        }
+      })
+    })
+  },
   methods: {
     open () {
       $(this.$el).modal('show')
+    },
+    close () {
+      $(this.$el).modal('hide')
+    }
+  },
+  vuex: {
+    actions: {
+      addTrackItem (store, item) {
+        store.dispatch(types.TRACKER_ADD_ITEM, item)
+      }
     }
   }
 }

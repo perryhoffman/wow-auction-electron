@@ -7,5 +7,7 @@ import 'semantic'
 new Vue({
   el: 'body',
   store,
-  components: { App }
+  components: { App },
+  ready () {
+  }
 })

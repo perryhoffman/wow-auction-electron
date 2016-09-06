@@ -3,7 +3,7 @@
     <header-component></header-component>
     <div class="items-container content">
       <div class="ui stackable four column grid">
-        <item-card v-for="item in tracked_items" :item="item"></item-card>
+        <item-card v-for="(index, item) in tracked_items" :item="item" :index="index"></item-card>
       </div>
     </div>
     <footer-component></footer-component>
@@ -36,5 +36,20 @@ export default {
 
 .items-container{
   padding: 25px;
+}
+
+::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+    background: rgba(255,255,255,0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-corner {
+    background: #bbb;
 }
 </style>

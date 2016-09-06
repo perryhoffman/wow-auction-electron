@@ -1,5 +1,5 @@
 <template>
-<span>
+<span class="gold">
   <span class="money"><span class="money" v-text="formatted.gold"></span><img src="../assets/gold.gif"/></span>
   <span class="money"><span class="silver" v-text="formatted.silver"></span><img src="../assets/silver.gif"/></span>
   <span class="money"><span class="copper" v-text="formatted.copper"></span><img src="../assets/copper.gif"/></span>
@@ -7,9 +7,16 @@
 </template>
 
 <style lang="scss" scoped>
+  .gold.no-icon{
+    img{
+      opacity:0;
+      margin:0;
+      width: 5px;
+    }
+  }
   .money{
     font-family: Arial, Verdana;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: -0.2px;
     
     img{

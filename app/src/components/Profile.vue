@@ -2,8 +2,8 @@
 <div class="ui container">
   <div class="left menu">
     <div class="item">
-      <div class="ui primary button" v-on:click="openLogin()" v-show="!character">Log in to Battle.net</div>
-      <div class="ui top pointing dropdown basic button inverted" v-show="character">
+      <div class="ui primary button" v-on:click="openLogin()" v-show="!character.name">Log in to Battle.net</div>
+      <div class="ui top pointing dropdown basic button inverted" v-show="character.name" @contextmenu="logout">
         <span class="text" v-text="character.name"></span>
         <div class="ui secondary vertical pointing menu">
           <a class="teal item" v-for="(index, character) in character_choices" v-on:click="selectCharacter(character, index)" :class="{'active': character.active}">
@@ -74,9 +74,10 @@
 </style>
 
 <script>
-import {ipcRenderer} from 'electron'
+import {ipcRenderer, remote} from 'electron'
 import Gold from './Gold'
 import utils from '../services/utils'
+import api from '../services/armory.api'
 import * as types from '../vuex/mutation-types'
 import $ from 'jquery'
 
@@ -151,6 +152,9 @@ export default {
     openLogin () {
       ipcRenderer.send('login-popup')
     },
+    logout () {
+      api.logout()
+    },
     getCurrentCharacter ($html) {
       let $el = $html.find('.character-list .primary a.char.pinned')
 
@@ -179,8 +183,12 @@ export default {
       this.setCharacterChoices(characters)
     },
     getXstoken ($html) {
-      let xstoken = $html.find('body').html().match(/var xsToken = '(.*)';/)[1]
-      this.setXSToken(xstoken)
+      remote.getCurrentWebContents().session.cookies.get({
+        name: 'xstoken'
+      }, (err, cookies) => {
+        if (err) { console.log(err) }
+        this.setXSToken(cookies[0].value)
+      })
     },
     getAuctionActivity ($html) {
       let activity = $html.find('.activity table tr')

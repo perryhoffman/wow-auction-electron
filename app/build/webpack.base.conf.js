@@ -8,6 +8,9 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  node: {
+    fs: "empty"
+  },
   output: {
     path: config.build.assetsRoot,
     publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,

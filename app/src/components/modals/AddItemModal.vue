@@ -7,7 +7,7 @@
   <div class="content">
     <div class="ui fluid search">
       <div class="ui fluid icon input">
-        <input class="prompt" type="text" placeholder="eg. Spirit of War">
+        <input class="prompt" type="text" placeholder="eg. Spirit of War" v-model="search_term">
         <i class="search icon"></i>
       </div>
       <div class="results"></div>
@@ -16,41 +16,52 @@
 </div>
 </template>
 
-<style>
+<style scoped>
 .ui.fluid.search{
   width: 100%;
+}
+
+.modal{
+  margin-top: -25% !important;
+}
+
+.results{
+  max-height: 300px;
+  overflow-y: auto;
 }
 </style>
 
 <script>
 import $ from 'jquery'
-import itemsXHR from '../../services/items.db'
+// import itemsXHR from '../../services/items.db'
+import items from '../../../static/master_auctionable_items.json'
 import * as types from '../../vuex/mutation-types'
 
 export default {
   ready () {
-    itemsXHR.then(items => {
-      $(this.$el).find('.ui.search').search({
-        source: items,
-        searchFields: ['name'],
-        minCharacters: 3,
-        fields: {
-          title: 'name'
-        },
-        searchFullText: true,
-        onSelect: (result) => {
-          this.addTrackItem(result)
-          this.close()
-        }
-      })
+    $(this.$el).find('.ui.search').search({
+      source: items,
+      searchFields: ['name'],
+      maxResults: 20,
+      minCharacters: 3,
+      fields: {
+        title: 'name'
+      },
+      searchFullText: true,
+      onSelect: (result) => {
+        this.addTrackItem(result)
+        this.close()
+      }
     })
   },
   methods: {
     open () {
       $(this.$el).modal('show')
+      this.search_term = ''
     },
     close () {
       $(this.$el).modal('hide')
+      this.search_term = ''
     }
   },
   vuex: {

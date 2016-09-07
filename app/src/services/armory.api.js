@@ -4,6 +4,18 @@ import store from '../vuex/store'
 
 const API_BASE_URL = 'https://us.battle.net/wow/en/vault/character/auction/'
 
+const errorHandler = (res) => {
+  if (!res) {
+    throw new Error()
+  }
+
+  if (!res || res.error) {
+    throw res.error
+  }
+
+  return res
+}
+
 export default {
   search_auction: (itemId) => {
     $.get(API_BASE_URL)
@@ -28,12 +40,8 @@ export default {
         auc: auc_id,
         money: price_buyout,
         xstoken: store.state.authentication.xstoken
-      }),
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Accept': 'application/json, text/javascript, */*; q=0.01'
-      }
-    })
+      })
+    }).then(errorHandler)
   },
   logout: () => {
     return $.get('https://us.battle.net/wow/en/vault/character/auction/browse?logout')

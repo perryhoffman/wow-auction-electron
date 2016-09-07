@@ -33,6 +33,7 @@ export default {
 
 <style>
 @import '../node_modules/semantic-ui/dist/semantic.css';
+@import '../node_modules/toastr/build/toastr.css';
 
 .items-container{
   padding: 25px;

@@ -10,14 +10,14 @@
     <div class="ui top pointing dropdown icon item right">
       <i class="setting icon inverted"></i>
       <div class="menu">
-        <div class="item">Manage Autobuy</div>
+        <div class="item" @click="openPriceAlertModal">Manage Autobuy</div>
         <div class="divider"></div>
         <div class="item" @click="removeItem(index)">Remove Item</div>
       </div>
     </div>
   </div>
   <div class="ui attached listing-container">
-    <div class="ui listing" @contextmenu="buyOutItem(auction)" v-for="auction in auctions" track-by="auc_id">
+    <div class="ui listing" v-bind:class="{'alerted' : auction.alerted }" @contextmenu="buyOutItem(auction, $index)" v-for="auction in auctions" track-by="auc_id">
       <div class="ui two column grid">
         <div class="column">
           <div class="item">{{auction.quantity}} x {{auction.item}}</div>
@@ -31,6 +31,8 @@
       </div>
     </div>
   </div>
+
+  <item-alert-modal v-ref:itemAlertModal :index="index"></item-alert-modal>
 </div>
 </template>
 
@@ -39,14 +41,26 @@ import * as types from '../vuex/mutation-types'
 import $ from 'jquery'
 import Gold from './Gold'
 import api from '../services/armory.api'
+import utils from '../services/utils'
+import toastr from 'toastr'
+import ItemAlertModal from './modals/ItemAlertModal'
 
 export default {
   components: {
-    Gold
+    Gold,
+    ItemAlertModal
   },
   data () {
     return {
       auctions: []
+    }
+  },
+  computed: {
+    tracker () {
+      return this.tracked_items[this.index]
+    },
+    alertAmount () {
+      return this.tracked_items[this.index].alertAmount
     }
   },
   props: ['item', 'index'],
@@ -61,7 +75,8 @@ export default {
   },
   vuex: {
     getters: {
-      xstoken: state => state.authentication.xstoken
+      xstoken: state => state.authentication.xstoken,
+      tracked_items: state => state.tracker.tracked_items
     },
     actions: {
       removeItem (store, index) {
@@ -70,14 +85,49 @@ export default {
     }
   },
   methods: {
+    openPriceAlertModal () {
+      this.$refs.itemalertmodal.open()
+    },
+    checkAlerts (items) {
+      let hasAlert = false
+
+      for (let item of items) {
+        let pricePer = utils.getFullAmount(item.price_buyout_per)
+
+        if (pricePer <= this.alertAmount) {
+          item.alerted = true
+          hasAlert = true
+        }
+      }
+
+      if (hasAlert) {
+        utils.playAlertSound()
+      }
+    },
     updateListing () {
       api.search_auction(this.item.id)
         .then((auctions) => {
           this.auctions = auctions
+
+          if (typeof this.alertAmount === 'number') {
+            console.log('checking', this.index, this.alertAmount)
+            this.checkAlerts(this.auctions)
+          }
+
+          return this.auctions
         })
     },
-    buyOutItem (auction) {
+    buyOutItem (auction, index) {
       api.buyout(auction)
+        .then((res) => {
+          this.auctions.splice(index, 1)
+
+          utils.playCoinSound()
+          toastr.success('Purchase completed')
+        })
+        .catch((err) => {
+          toastr.error(err.message)
+        })
     }
   }
 }
@@ -124,6 +174,10 @@ export default {
 
 .listing:hover{
   background:#180c04;
+}
+
+.listing.alerted{
+  box-shadow:0 0 20px yellow inset;
 }
 
 .listing:hover .seller{

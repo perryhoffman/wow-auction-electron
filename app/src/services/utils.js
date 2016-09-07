@@ -1,3 +1,6 @@
+const AUDIO_COIN = new window.Audio('/static/coin.ogg')
+const AUDIO_ALERT = new window.Audio('/static/alert.ogg')
+
 export default {
   extractMoney (amount) {
     var gold = Math.floor(amount / 10000)
@@ -15,6 +18,13 @@ export default {
     }
   },
   getFullAmount ({gold, silver, copper}) {
-    return (gold * 10000) + (silver * 100) + copper
+    return ((parseInt(gold) || 0) * 10000) + ((parseInt(silver) || 0) * 100) + (parseInt(copper) || 0)
+  },
+  playCoinSound () {
+    AUDIO_COIN.play()
+  },
+  playAlertSound () {
+    if (!AUDIO_ALERT.paused) return
+    AUDIO_ALERT.play()
   }
 }

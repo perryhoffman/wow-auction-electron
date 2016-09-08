@@ -25,7 +25,7 @@ module.exports = {
       'components': path.resolve(__dirname, '../src/components'),
       // adding our externals libs
       jquery: path.resolve(__dirname, '../node_modules/jquery/dist/jquery.js'),
-      'semantic': path.resolve(__dirname, '../node_modules/semantic-ui/dist/semantic.min.js')
+      'semantic': path.resolve(__dirname, '../node_modules/semantic-ui-css/semantic.min.js')
     }
   },
   resolveLoader: {
@@ -81,8 +81,7 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
-      semantic: 'semantic-ui',
-      'semantic-ui': 'semantic-ui'
+      semantic: 'semantic-ui-css'
     }),
     new webpack.ExternalsPlugin('commonjs2', [
       'desktop-capturer',

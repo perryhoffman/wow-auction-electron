@@ -1,10 +1,8 @@
 // Install
-
-if (require('electron-squirrel-startup')) return
+// if (require('electron-squirrel-startup')) return
 
 // App
 const electron = require('electron')
-const storage = require('electron-json-storage')
 
 const app = electron.app
 
@@ -24,11 +22,13 @@ function createWindow () {
   })
 
   // BrowserWindow.addDevToolsExtension('C:\\Users\\Alex Cheuk\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 2\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\2.1.2_0')
-  BrowserWindow.addDevToolsExtension('C:\\Users\\Alex Cheuk\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\2.1.2_0')
-  require('devtron').install()
-
-  // mainWindow.loadURL(`file://${__dirname}/index.html`);
-  mainWindow.loadURL(`http://localhost:8080`)
+  // BrowserWindow.addDevToolsExtension('C:\\Users\\Alex Cheuk\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\2.1.2_0')
+  if (process.env.NODE_ENV === 'development') {
+    require('devtron').install()
+    mainWindow.loadURL(`http://localhost:8080`)
+  }else{
+    mainWindow.loadURL(`file://${__dirname}/dist/index.html`)
+  }
 
   mainWindow.on('closed', function () {
     mainWindow = null

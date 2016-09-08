@@ -12,7 +12,7 @@
 
 <script>
 import '../node_modules/jquery/dist/jquery.js'
-import '../node_modules/semantic-ui/dist/semantic.js'
+import '../node_modules/semantic-ui-css/semantic.js'
 import HeaderComponent from './components/Header'
 import FooterComponent from './components/Footer'
 import ItemCard from './components/ItemCard'
@@ -32,7 +32,7 @@ export default {
 </script>
 
 <style>
-@import '../node_modules/semantic-ui/dist/semantic.css';
+@import '../node_modules/semantic-ui-css/semantic.css';
 @import '../node_modules/toastr/build/toastr.css';
 
 .items-container{

@@ -1,21 +1,22 @@
 {
-  "name": "auction",
+  "name": "autotioneer",
+  "productName": "WoW Much Remote",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "alexcheuk <cheuk.alex@gmail.com>",
   "private": true,
+  "main": "electron.js",
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-    "unit": "karma start test/unit/karma.conf.js --single-run",
-    "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "babel-runtime": "^6.0.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "jquery": "^3.1.0",
+    "semantic-ui-css": "^2.2.4",
     "toastr": "^2.1.2",
-    "vue": "^1.0.21",
-    "vuex": "^1.0.0-rc.2"
+    "vue": "^1.0.21"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -46,7 +47,6 @@
     "http-proxy-middleware": "^0.12.0",
     "inject-loader": "^2.0.1",
     "isparta-loader": "^2.0.0",
-    "jquery": "^3.1.0",
     "json-loader": "^0.5.4",
     "karma": "^0.13.15",
     "karma-coverage": "^0.5.5",
@@ -72,6 +72,7 @@
     "webpack": "^1.12.2",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0",
-    "webpack-merge": "^0.8.3"
+    "webpack-merge": "^0.8.3",
+    "babel-runtime": "^6.0.0"
   }
 }

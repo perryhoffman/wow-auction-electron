@@ -87,6 +87,9 @@ export default {
     actions: {
       removeItem (store, index) {
         store.dispatch(types.TRACKER_REMOVE_ITEM, index)
+      },
+      historyAdd (store, auction) {
+        store.dispatch(types.HISTORY_ADD, auction)
       }
     }
   },
@@ -105,6 +108,7 @@ export default {
           hasAlert = true
 
           if (this.autobuy === true) {
+            item.autobuy = true
             this.buyOutItem(item)
           }
         }
@@ -136,7 +140,10 @@ export default {
           auction.bought = true
 
           utils.playCoinSound()
+
           toastr.success('Purchase completed')
+
+          this.historyAdd(auction)
         })
         .catch((err) => {
           toastr.error(err.message)

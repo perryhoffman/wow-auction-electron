@@ -8,7 +8,7 @@
     "pack": "build --dir",
     "clean:win": "rm -rf dist/win && rm -rf dist/win-unpacked",
     "dist": "npm run clean:win && build --x64 --publish never",
-    "dist:osx": "cd app && npm install && npm run build && cd .. && build -m --publish never"
+    "dist:osx": "cd app && npm install && npm run build && cd .. && npm install electron-builder -g && build -m --publish never"
   },
   "directories": {
     "buildResources": "resources"

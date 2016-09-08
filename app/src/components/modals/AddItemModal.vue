@@ -22,7 +22,7 @@
 }
 
 .modal{
-  margin-top: -25% !important;
+  margin-top: -200px !important;
 }
 
 .results{

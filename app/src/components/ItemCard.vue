@@ -136,6 +136,7 @@ export default {
           auction.bought = true
 
           utils.playCoinSound()
+          console.log('Purchased ==>', auction.item, ' @ ', auction.quantity, ' X ', auction.price_buyout_per.gold, '.', auction.price_buyout_per.silver, '.', auction.price_buyout_per.copper)
           toastr.success('Purchase completed')
         })
         .catch((err) => {

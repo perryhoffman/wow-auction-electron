@@ -66,7 +66,11 @@ function showLoginPopup () {
   loginWindow = new BrowserWindow({
     width: 1024,
     height: 760,
-    frame: false
+    frame: false,
+    webPreferences: {
+      webSecurity: false,
+      nodeIntegration: false
+    }
   })
   loginWindow.loadURL('https://us.battle.net/login/en/')
 

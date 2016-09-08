@@ -1,8 +1,8 @@
 {
-  "name": "autotioneer",
-  "productName": "WoW Much Remote",
+  "name": "auctionpro",
+  "productName": "AuctionPro",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "WoW Auction",
   "author": "alexcheuk <cheuk.alex@gmail.com>",
   "private": true,
   "main": "electron.js",
@@ -12,11 +12,11 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.1.0",
     "semantic-ui-css": "^2.2.4",
     "toastr": "^2.1.2",
-    "vue": "^1.0.21"
+    "vue": "^1.0.21",
+    "vuex": "^1.0.0-rc.2"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -68,7 +68,6 @@
     "vue-html-loader": "^1.0.0",
     "vue-loader": "^8.3.0",
     "vue-style-loader": "^1.0.0",
-    "vuex": "^1.0.0-rc.2",
     "webpack": "^1.12.2",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0",

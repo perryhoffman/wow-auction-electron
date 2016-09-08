@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="ui attached listing-container">
-    <div class="ui listing" v-bind:class="{'alerted' : auction.alerted }" @contextmenu="buyOutItem(auction, $index)" v-for="auction in auctions" track-by="auc_id">
+    <div class="ui listing" v-bind:class="{'alerted' : auction.alerted }" @contextmenu="buyOutItem(auction, $index)" v-for="auction in auctions" track-by="auc_id" v-show="!auction.bought">
       <div class="ui two column grid">
         <div class="column">
           <div class="item">{{auction.quantity}} x {{auction.item}}</div>
@@ -61,6 +61,12 @@ export default {
     },
     alertAmount () {
       return this.tracked_items[this.index].alertAmount
+    },
+    notification () {
+      return this.tracked_items[this.index].notification
+    },
+    autobuy () {
+      return this.tracked_items[this.index].autobuy
     }
   },
   props: ['item', 'index'],
@@ -97,30 +103,37 @@ export default {
         if (pricePer <= this.alertAmount) {
           item.alerted = true
           hasAlert = true
+
+          if (this.autobuy === true) {
+            this.buyOutItem(item)
+          }
         }
       }
 
-      if (hasAlert) {
+      if (hasAlert && this.notification) {
         utils.playAlertSound()
       }
     },
     updateListing () {
       api.search_auction(this.item.id)
         .then((auctions) => {
+          auctions.map((item) => {
+            item.bought = false
+          })
+
           this.auctions = auctions
 
           if (typeof this.alertAmount === 'number') {
-            console.log('checking', this.index, this.alertAmount)
             this.checkAlerts(this.auctions)
           }
 
           return this.auctions
         })
     },
-    buyOutItem (auction, index) {
+    buyOutItem (auction) {
       api.buyout(auction)
         .then((res) => {
-          this.auctions.splice(index, 1)
+          auction.bought = true
 
           utils.playCoinSound()
           toastr.success('Purchase completed')

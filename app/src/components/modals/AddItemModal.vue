@@ -38,6 +38,11 @@ import items from '../../../static/master_auctionable_items.json'
 import * as types from '../../vuex/mutation-types'
 
 export default {
+  data () {
+    return {
+      search_term: ''
+    }
+  },
   ready () {
     $(this.$el).find('.ui.search').search({
       source: items,
@@ -67,7 +72,12 @@ export default {
   vuex: {
     actions: {
       addTrackItem (store, item) {
-        store.dispatch(types.TRACKER_ADD_ITEM, item)
+        store.dispatch(types.TRACKER_ADD_ITEM, {
+          notification: false,
+          autobuy: false,
+          alertAmount: null,
+          ...item
+        })
       }
     }
   }

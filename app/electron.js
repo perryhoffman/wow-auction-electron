@@ -1,6 +1,3 @@
-// Install
-// if (require('electron-squirrel-startup')) return
-
 // App
 const electron = require('electron')
 

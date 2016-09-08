@@ -1,13 +1,14 @@
 {
   "name": "auctionpro",
   "productName": "AuctionPro",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron ./app",
     "postinstall": "install-app-deps",
     "pack": "build --dir",
     "clean:win": "rm -rf dist/win && rm -rf dist/win-unpacked",
-    "dist": "npm run clean:win && build --x64 --publish never"
+    "dist": "npm run clean:win && build --x64 --publish never",
+    "dist:osx": "cd app && npm install && npm run build && cd .. && npm install appdmg && build -m --publish never"
   },
   "directories": {
     "buildResources": "resources"

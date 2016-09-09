@@ -1,26 +1,24 @@
 {
   "name": "auctionpro",
   "productName": "AuctionPro",
-  "version": "0.1.1",
+  "version": "1.0.5",
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron ./app",
     "postinstall": "install-app-deps",
     "pack": "build --dir",
-    "clean:win": "rm -rf dist/win && rm -rf dist/win-unpacked",
-    "dist": "npm run clean:win && build --x64 --publish never",
+    "clean:win": "rm -rf compiled-builds",
+    "dist": "npm run dist:win",
+    "dist:win": "npm run clean:win && build --x64 --publish never",
     "dist:osx": "cd app && npm install && npm run build && cd .. && npm install appdmg && build -m --publish never"
   },
   "directories": {
-    "buildResources": "resources"
+    "buildResources": "resources",
+    "output": "compiled-builds",
+    "app": "app-packed"
   },
   "build": {
     "appId": "com.alexcheuk.wowremote",
     "app-category-type": "public.wowremote",
-    "files": [
-      "dist/**/*",
-      "electron.js",
-      "package.json"
-    ],
     "win": {
       "target": [
         "nsis"

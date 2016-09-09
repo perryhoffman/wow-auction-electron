@@ -1,18 +1,44 @@
 <template>
 <div class="column">
+  <div class="ui popup bottom center hidden alert-popup">
+    <h5>Alert Settings</h5>
+    <table>
+      <tr>
+        <td>Price:</td>
+        <td style="text-align:right"><gold :amount="alertAmount"></gold></td>
+      </tr>
+      <tr>
+        <td>Sound:</td>
+        <td style="text-align:right"><a class="ui button basic mini green" v-show="item.notification">ON</a><a class="ui button basic mini red" v-show="!item.notification">OFF</a></td>
+      </tr>
+      <tr>
+        <td>Auto Buy:</td>
+        <td style="text-align:right">
+          <a class="ui button basic mini" :class="{'green': canAutobuy, 'red': !canAutobuy}">{{canAutobuy ? 'ON' : 'OFF'}}</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
   <div class="ui top attached menu inverted card-header">
     <div class="header borderless item">
       <h5 class="ui header inverted left floated">
         {{item.name}}
-        <div class="sub header inventory-qty">You Have: {{item.quantity || 0}}</div>
+        <div class="sub header inventory-qty">You Have: {{stock.quantity || 0}}</div>
       </h5>
     </div>
-    <div class="ui top pointing dropdown icon item right">
-      <i class="setting icon inverted"></i>
-      <div class="menu">
-        <div class="item" @click="openPriceAlertModal">Manage Autobuy</div>
-        <div class="divider"></div>
-        <div class="item" @click="removeItem(index)">Remove Item</div>
+    <div class="right menu">
+      <a class="ui icon item" @click="openInventoryModal()">
+        <i class="cart icon inverted"></i>
+      </a>
+      <a class="ui icon item alert-info" @click="openPriceAlertModal()">
+        <i class="alarm outline icon inverted" :class="{'mute' : !hasAlert }"></i>
+      </a>
+      <div class="ui top dropdown icon item">
+        <i class="setting icon inverted"></i>
+        <div class="menu">
+          <div class="item" @click="removeItem(index)">Remove Item</div>
+        </div>
       </div>
     </div>
   </div>
@@ -33,6 +59,7 @@
   </div>
 
   <item-alert-modal v-ref:itemAlertModal :index="index"></item-alert-modal>
+  <sell-inventory-modal v-ref:sellInventoryModal :index="index" :lowest="lowestPricePer"></sell-inventory-modal>
 </div>
 </template>
 
@@ -44,11 +71,13 @@ import api from '../services/armory.api'
 import utils from '../services/utils'
 import toastr from 'toastr'
 import ItemAlertModal from './modals/ItemAlertModal'
+import SellInventoryModal from './modals/SellInventoryModal'
 
 export default {
   components: {
     Gold,
-    ItemAlertModal
+    ItemAlertModal,
+    SellInventoryModal
   },
   data () {
     return {
@@ -67,6 +96,18 @@ export default {
     },
     autobuy () {
       return this.tracked_items[this.index].autobuy
+    },
+    hasAlert () {
+      return (typeof this.alertAmount === 'number' && this.alertAmount > 0)
+    },
+    canAutobuy () {
+      return this.globalAutobuy && this.autobuy
+    },
+    stock () {
+      return this.inventory[this.item.id] || {}
+    },
+    lowestPricePer () {
+      return (this.auctions[0]) ? this.auctions[0].price_per : 0
     }
   },
   props: ['item', 'index'],
@@ -76,23 +117,41 @@ export default {
   ready () {
     $(this.$el).find('.dropdown').dropdown()
 
+    $(this.$el).find('.alert-info').popup({
+      popup: $(this.$el).find('.alert-popup'),
+      position: 'bottom center',
+      on: 'hover',
+      delay: {
+        show: 0,
+        hide: 0
+      }
+    })
+
     this.updateListing()
     this.listingInterval = setInterval(this.updateListing, 5000)
   },
   vuex: {
     getters: {
       xstoken: state => state.authentication.xstoken,
-      tracked_items: state => state.tracker.tracked_items
+      tracked_items: state => state.tracker.tracked_items,
+      globalAutobuy: state => state.profile.autobuy,
+      inventory: state => state.profile.inventory
     },
     actions: {
       removeItem (store, index) {
         store.dispatch(types.TRACKER_REMOVE_ITEM, index)
+      },
+      historyAdd (store, auction) {
+        store.dispatch(types.HISTORY_ADD, auction)
       }
     }
   },
   methods: {
     openPriceAlertModal () {
       this.$refs.itemalertmodal.open()
+    },
+    openInventoryModal () {
+      this.$refs.sellinventorymodal.open()
     },
     checkAlerts (items) {
       let hasAlert = false
@@ -104,7 +163,8 @@ export default {
           item.alerted = true
           hasAlert = true
 
-          if (this.autobuy === true) {
+          if (this.canAutobuy) {
+            item.autobuy = true
             this.buyOutItem(item)
           }
         }
@@ -136,8 +196,9 @@ export default {
           auction.bought = true
 
           utils.playCoinSound()
-          console.log('Purchased ==>', auction.item, ' @ ', auction.quantity, ' X ', auction.price_buyout_per.gold, '.', auction.price_buyout_per.silver, '.', auction.price_buyout_per.copper)
           toastr.success('Purchase completed')
+
+          this.historyAdd(auction)
         })
         .catch((err) => {
           toastr.error(err.message)
@@ -148,6 +209,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.alert-popup{
+  width: 200px;
+
+  table{
+    width:100%;
+    font-size: 11px;
+
+    td{
+      padding:2px 0;
+    }
+
+    td + td{
+      padding-left: 5px;
+    }
+  }
+}
 .card .ui.header{
   margin-bottom:0;
 }
@@ -175,7 +253,7 @@ export default {
   color:#fff;
   padding: 5px 10px;
 
-  cursor: url(/static/gam374.cur), default;
+  cursor: url(/static/gam374.png), default;
 }
 
 .listing + .listing{

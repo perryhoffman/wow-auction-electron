@@ -7,6 +7,14 @@
 </template>
 
 <style lang="scss" scoped>
+  .gold{
+    display:inline-block;
+  }
+
+  .gold.padded{
+    padding: 0 8px;
+  }
+
   .gold.no-icon{
     img{
       opacity:0;
@@ -20,7 +28,9 @@
     letter-spacing: -0.2px;
     
     img{
-      margin-left:2px;
+      margin-left:2px !important;
+      height: 12px !important;
+      width: 12px !important;
     }
   }
 

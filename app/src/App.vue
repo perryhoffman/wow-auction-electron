@@ -15,7 +15,7 @@
                 {{won.datetime|timeago}}
               </div>
               <div class="summary">
-                You <span v-if="!won.autobuy">bought</span><a v-if="won.autobuy" class="autobought">Auto Bought</a> {{won.quantity}} x <a>{{won.item}}</a> for <gold class="padded" :amount="won.price_buyout"></gold> each.
+                You <span v-if="!won.autobuy">bought</span><a v-if="won.autobuy" class="autobought">Auto Bought</a> {{won.quantity}} x <a>{{won.item}}</a> for <gold class="padded" :amount="won.price_per"></gold> each for a total of <gold class="padded" :amount="won.price_buyout"></gold>.
               </div>
             </div>
           </div>

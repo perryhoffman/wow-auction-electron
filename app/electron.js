@@ -3,6 +3,7 @@
 
 // App
 const electron = require('electron')
+const path = require('path')
 
 const app = electron.app
 
@@ -27,7 +28,7 @@ function createWindow () {
     require('devtron').install()
     mainWindow.loadURL(`http://localhost:8080`)
   }else{
-    mainWindow.loadURL(`file://${__dirname}/dist/index.html`)
+    mainWindow.loadURL(`electron://index.html`)
   }
 
   mainWindow.on('closed', function () {
@@ -45,6 +46,15 @@ function createWindow () {
 }
 
 app.on('ready', createWindow)
+
+app.on('ready', () => {
+  electron.protocol.registerFileProtocol('electron', (request, callback) => {
+    const url = request.url.substr(11)
+    callback({path: path.normalize(`${__dirname}/${url}`)})
+  }, (error) => {
+    if (error) console.error('Failed to register protocol')
+  })
+})
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {

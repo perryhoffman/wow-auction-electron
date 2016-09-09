@@ -2,6 +2,22 @@ import utils from './utils'
 import $ from 'jquery'
 
 export default {
+  inventory (html) {
+    let body = html.querySelectorAll('body')[0].innerHTML.replace(/<img[^>]*>/g, '')
+    let table = $(body).find('#inventory-0')
+    let results = {}
+
+    table.find('tbody tr').each((index, elem) => {
+      elem = $(elem)
+      results[elem.find('.name a').data('id')] = {
+        item_id: elem.find('.name a').data('id'),
+        name: elem.find('.name a').text().trim(),
+        quantity: elem.find('.quantity').text().trim()
+      }
+    })
+
+    return {data: results}
+  },
   search_auction (html) {
     let body = html.querySelectorAll('body')[0].innerHTML.replace(/<img[^>]*>/g, '')
     let table = $(body).find('.auction-house table')

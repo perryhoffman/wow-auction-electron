@@ -1,6 +1,9 @@
 <template>
   <div class="ui small borderless menu menu--header">
     <div class="ui container">
+      <div class="header item">
+        <img src="../assets/logo.png">
+      </div>
       <div class="ui secondary pointing left menu">
         <a class="item" :class="{'active' : active_tab === 'tracker' }" @click="changeTab('tracker')">
           Tracker
@@ -21,7 +24,11 @@
       </div>
       <div class="right menu">
         <div class="item">
-          <div class="ui orange button">Auto Buy</div>
+          
+          <div class="ui labeled button" tabindex="0" @click="toggleAutobuy()">
+            <div class="ui orange button">Auto Buy</div>
+            <a class="ui basic left pointing label">{{autobuy ? 'ON' : 'OFF' }}</a>
+          </div>
 
           <!--<div class="ui purple button">Inventory</div>
 
@@ -48,7 +55,7 @@
 
 <style scoped>
 .ui.menu--header .item img.logo {
-    margin-right: 1.5em;
+    margin-right: 1em;
 }
 
 .ui.menu--header .item .button+ .button {
@@ -59,13 +66,24 @@
 <script>
 import * as types from '../vuex/mutation-types'
 import AddItemModal from './modals/AddItemModal'
+import api from '../services/armory.api'
 
 export default {
   ready () {
+    this.checkInventory()
+    this.inventoryInverval = setInterval(this.checkInventory, 5000)
+  },
+  beforeDestroy () {
+    clearInterval(this.inventoryInverval)
   },
   methods: {
     openAddItemModal () {
       this.$refs.additemmodal.open()
+    },
+    checkInventory () {
+      api.get_inventory().then(inventory => {
+        this.getInventory(inventory)
+      })
     }
   },
   components: {
@@ -75,11 +93,19 @@ export default {
     getters: {
       tracked_items: (store) => store.tracker.tracked_items,
       active_tab: state => state.tabs.active,
-      won_history: state => state.history.won
+      won_history: state => state.history.won,
+      autobuy: state => state.profile.autobuy,
+      inventory: state => state.profile.inventory
     },
     actions: {
       changeTab (store, tab) {
         store.dispatch(types.TAB_CHANGE, tab)
+      },
+      toggleAutobuy (store) {
+        store.dispatch(types.PROFILE_SET_AUTOBUY, !this.autobuy)
+      },
+      getInventory (store, inventory) {
+        store.dispatch(types.PROFILE_SET_INVENTORY, inventory)
       }
     }
   }

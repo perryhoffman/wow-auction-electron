@@ -27,7 +27,7 @@ export default {
         reverse: false,
         sort: 'unitBuyout'
       }
-    }).then((html, a, res) => {
+    }).then((html) => {
       let scapedData = scraper.search_auction(html)
       return scapedData.data
     })
@@ -42,6 +42,15 @@ export default {
         xstoken: store.state.authentication.xstoken
       })
     }).then(errorHandler)
+  },
+  get_inventory: () => {
+    return $.ajax({
+      url: API_BASE_URL + 'create',
+      method: 'GET'
+    }).then((html) => {
+      let scapedData = scraper.inventory(html)
+      return scapedData.data
+    })
   },
   logout: () => {
     return $.get('https://us.battle.net/wow/en/vault/character/auction/browse?logout')

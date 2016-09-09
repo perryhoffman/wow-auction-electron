@@ -1,6 +1,8 @@
 import storage from '../../services/storage'
 
 import {
+  PROFILE_SET_INVENTORY,
+  PROFILE_SET_AUTOBUY,
   PROFILE_SET_MONEY,
   PROFILE_SET_MONEY_EARNED,
   PROFILE_SET_CHARACTER,
@@ -8,10 +10,12 @@ import {
 } from '../mutation-types'
 
 const state = Object.assign({
+  autobuy: true,
   money: 0,
   money_earned: 0,
   character: {},
-  character_choices: []
+  character_choices: [],
+  inventory: {}
 }, storage.get('app-state').profile)
 
 const mutations = {
@@ -26,6 +30,12 @@ const mutations = {
   },
   [PROFILE_SET_CHARACTER_CHOICES] (state, choices) {
     state.character_choices = choices
+  },
+  [PROFILE_SET_AUTOBUY] (state, bool) {
+    state.autobuy = bool
+  },
+  [PROFILE_SET_INVENTORY] (state, inventory) {
+    state.inventory = inventory
   }
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "auctionpro",
   "productName": "AuctionPro",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron ./app",
     "postinstall": "install-app-deps",

@@ -43,6 +43,37 @@ export default {
       })
     }).then(errorHandler)
   },
+  deposit: ({itemId, stack_size, num_stacks}) => {
+    return $.ajax({
+      url: API_BASE_URL + 'deposit',
+      method: 'POST',
+      data: {
+        item: itemId,
+        duration: 1,
+        quan: stack_size,
+        stacks: num_stacks,
+        sk: store.state.authentication.xstoken
+      }
+    }).then(errorHandler)
+  },
+  createAuction: ({itemId, stack_size, num_stacks, buyoutAmount, bidAmount, ticket}) => {
+    return $.ajax({
+      url: API_BASE_URL + 'createAuction',
+      method: 'POST',
+      data: {
+        itemId: itemId,
+        quantity: stack_size,
+        duration: 1,
+        stacks: num_stacks,
+        buyout: buyoutAmount * parseInt(stack_size),
+        bid: bidAmount * parseInt(stack_size),
+        ticket: ticket,
+        type: 'perItem',
+        xstoken: store.state.authentication.xstoken,
+        sourceType: 0
+      }
+    }).then(errorHandler)
+  },
   get_inventory: () => {
     return $.ajax({
       url: API_BASE_URL + 'create',

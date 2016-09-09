@@ -11,10 +11,10 @@ const state = Object.assign({
 
 const mutations = {
   [HISTORY_ADD] (state, auction) {
-    state.won = state.won.concat([{
+    state.won = [{
       datetime: moment().unix(),
       ...auction
-    }])
+    }].concat(state.won)
   }
 }
 

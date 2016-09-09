@@ -7,15 +7,12 @@
       </div>
     </div>
     <div class="items-container history-container content" v-if="active_tab === 'history'">
-      <div class="ui segment" v-for="won in won_history">
-        <div class="ui feed">
+      <div class="ui segment">
+        <div class="ui feed" v-for="won in won_history">
           <div class="event">
             <div class="content">
-              <div class="date">
-                {{won.datetime|timeago}}
-              </div>
               <div class="summary">
-                You <span v-if="!won.autobuy">bought</span><a v-if="won.autobuy" class="autobought">Auto Bought</a> {{won.quantity}} x <a>{{won.item}}</a> for <gold class="padded" :amount="won.price_per"></gold> each for a total of <gold class="padded" :amount="won.price_buyout"></gold>.
+                {{won.datetime|timeago}} - You <span v-if="!won.autobuy">bought</span><a v-if="won.autobuy" class="autobought">Auto Bought</a> {{won.quantity}} x <a>{{won.item}}</a> for <gold class="padded" :amount="won.price_per"></gold> each for a total of <gold class="padded" :amount="won.price_buyout"></gold>
               </div>
             </div>
           </div>

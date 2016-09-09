@@ -28,7 +28,10 @@
       </h5>
     </div>
     <div class="right menu">
-      <a class="ui icon item alert-info" @click="openPriceAlertModal">
+      <a class="ui icon item" @click="openInventoryModal()">
+        <i class="cart icon inverted"></i>
+      </a>
+      <a class="ui icon item alert-info" @click="openPriceAlertModal()">
         <i class="alarm outline icon inverted" :class="{'mute' : !hasAlert }"></i>
       </a>
       <div class="ui top dropdown icon item">
@@ -56,6 +59,7 @@
   </div>
 
   <item-alert-modal v-ref:itemAlertModal :index="index"></item-alert-modal>
+  <sell-inventory-modal v-ref:sellInventoryModal :index="index" :lowest="lowestPricePer"></sell-inventory-modal>
 </div>
 </template>
 
@@ -67,11 +71,13 @@ import api from '../services/armory.api'
 import utils from '../services/utils'
 import toastr from 'toastr'
 import ItemAlertModal from './modals/ItemAlertModal'
+import SellInventoryModal from './modals/SellInventoryModal'
 
 export default {
   components: {
     Gold,
-    ItemAlertModal
+    ItemAlertModal,
+    SellInventoryModal
   },
   data () {
     return {
@@ -98,7 +104,10 @@ export default {
       return this.globalAutobuy && this.autobuy
     },
     stock () {
-      return this.inventory[this.item.id]
+      return this.inventory[this.item.id] || {}
+    },
+    lowestPricePer () {
+      return (this.auctions[0]) ? this.auctions[0].price_per : 0
     }
   },
   props: ['item', 'index'],
@@ -140,6 +149,9 @@ export default {
   methods: {
     openPriceAlertModal () {
       this.$refs.itemalertmodal.open()
+    },
+    openInventoryModal () {
+      this.$refs.sellinventorymodal.open()
     },
     checkAlerts (items) {
       let hasAlert = false

@@ -1,7 +1,7 @@
 {
   "name": "auctionpro",
   "productName": "AuctionPro",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "WoW Auction",
   "author": "alexcheuk <cheuk.alex@gmail.com>",
   "private": true,

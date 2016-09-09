@@ -242,7 +242,7 @@ export default {
   color:#fff;
   padding: 5px 10px;
 
-  cursor: url(/static/gam374.cur), default;
+  cursor: url(/static/gam374.png), default;
 }
 
 .listing + .listing{

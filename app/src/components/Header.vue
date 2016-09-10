@@ -12,11 +12,10 @@
         <!--<a class="item" @click="changeTab('inventory')">
           Inventory
           <div class="ui small teal label">0</div>
-        </a>
-        <a class="item" @click="changeTab('auctions')">
-          Auctions
-          <div class="ui small teal label">0</div>
         </a>-->
+        <a class="item" :class="{'active' : active_tab === 'auctions' }" @click="changeTab('auctions')">
+          Auctions
+        </a>
         <a class="item" :class="{'active' : active_tab == 'history' }" @click="changeTab('history')">
           History
           <div class="ui small teal label">{{won_history.length}}</div>
@@ -72,9 +71,13 @@ export default {
   ready () {
     this.checkInventory()
     this.inventoryInverval = setInterval(this.checkInventory, 5000)
+
+    this.checkAuctions()
+    this.auctionsInventory = setInterval(this.checkAuctions, 5000)
   },
   beforeDestroy () {
     clearInterval(this.inventoryInverval)
+    clearInterval(this.auctionsInventory)
   },
   methods: {
     openAddItemModal () {
@@ -83,6 +86,11 @@ export default {
     checkInventory () {
       api.get_inventory().then(inventory => {
         this.getInventory(inventory)
+      })
+    },
+    checkAuctions () {
+      api.get_auctions().then(auctions => {
+        this.setAuctions(auctions)
       })
     }
   },
@@ -106,6 +114,9 @@ export default {
       },
       getInventory (store, inventory) {
         store.dispatch(types.PROFILE_SET_INVENTORY, inventory)
+      },
+      setAuctions (store, auc) {
+        store.dispatch(types.AUCTIONS_SET, auc)
       }
     }
   }

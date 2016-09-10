@@ -15,3 +15,5 @@ export const TRACKER_UPDATE_ALERT = 'TRACKER_UPDATE_ALERT'
 export const HISTORY_ADD = 'HISTORY_ADD'
 
 export const TAB_CHANGE = 'TAB_CHANGE'
+
+export const AUCTIONS_SET = 'AUCTIONS_SET'

@@ -23,14 +23,16 @@
         </div>
       </h6>
     </div>
-    <div class="item">
-      <h6 class="ui header inverted left floated">
-        EARNED
-        <div class="sub header">
-          <gold :amount="money_earned"></gold>
-        </div>
-      </h6>
-    </div>
+    <a class="item">
+      <div>
+        <h6 class="ui header inverted left floated earn-container">
+          EARNED
+          <div class="sub header">
+            <gold :amount="money_earned"></gold>
+          </div>
+        </h6>
+      </div>
+    </a>
     <div class="item">
       <h6 class="ui header inverted left floated">
         TOTAL
@@ -70,7 +72,7 @@
 </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 </style>
 
 <script>
@@ -199,7 +201,7 @@ export default {
       this.items_won = activity.eq(2).find('td').eq(3).text()
 
       let moneyEarned = {
-        gold: parseInt(activity.eq(4).find('td').eq(1).find('.icon-gold').text()) || 0,
+        gold: parseInt(activity.eq(4).find('td').eq(1).find('.icon-gold').text().replace(/,/g, '')) || 0,
         silver: parseInt(activity.eq(4).find('td').eq(1).find('.icon-silver').text()) || 0,
         copper: parseInt(activity.eq(4).find('td').eq(1).find('.icon-copper').text()) || 0
       }

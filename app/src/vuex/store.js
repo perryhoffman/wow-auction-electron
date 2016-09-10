@@ -6,6 +6,7 @@ import authentication from './modules/authentication'
 import tracker from './modules/tracker'
 import history from './modules/history'
 import tabs from './modules/tabs'
+import auctions from './modules/auctions'
 import storage from '../services/storage'
 // import * as types from './mutation-types'
 
@@ -21,6 +22,7 @@ const saveStatePlugin = store => {
 
 export default new Vuex.Store({
   modules: {
+    auctions,
     authentication,
     profile,
     tracker,

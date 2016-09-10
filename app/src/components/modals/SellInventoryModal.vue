@@ -115,7 +115,7 @@ export default {
       return this.tracked_items[this.index]
     },
     stock () {
-      return this.inventory[this.tracker.id].quantity
+      return (this.inventory[this.tracker.id]) ? this.inventory[this.tracker.id].quantity : 0
     }
   },
   ready () {

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="padding-bottom: 100px">
     <header-component></header-component>
     <div class="items-container content" v-show="active_tab === 'tracker'">
       <div class="ui stackable three column grid">
@@ -18,6 +18,34 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="items-container history-container content" v-if="active_tab === 'auctions'">
+      <h5>SOLD - {{auctions.sold.length}}</h5>
+      <div class="ui segment auction-container">
+        <div class="ui feed" v-for="won in auctions.sold">
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                You <a>sold</a> {{won.quantity}} x <a>{{won.item}}</a> for <gold class="padded" :amount="won.bought_price"></gold> at <gold class="padded" :amount="won.bought_price/won.quantity"></gold> each
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5>ACTIVE - {{auctions.active.length}}</h5>
+      <div class="ui segment auction-container">
+        <div class="ui feed" v-for="won in auctions.active">
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                You <a>active</a> {{won.quantity}} x <a>{{won.item}}</a> for <gold class="padded" :amount="won.bought_price"></gold> at <gold class="padded" :amount="won.bought_price/won.quantity"></gold> each
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <footer-component></footer-component>
   </div>
@@ -42,7 +70,8 @@ export default {
     getters: {
       tracked_items: state => state.tracker.tracked_items,
       active_tab: state => state.tabs.active,
-      won_history: state => state.history.won
+      won_history: state => state.history.won,
+      auctions: state => state.auctions
     }
   }
 }
@@ -54,6 +83,11 @@ export default {
 
 .items-container{
   padding: 25px;
+}
+
+.auction-container{
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .history-container{

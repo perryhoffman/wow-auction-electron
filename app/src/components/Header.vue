@@ -10,15 +10,15 @@
           <div class="ui small teal label">{{tracked_items.length}}</div>
         </a>
         <!--<a class="item" @click="changeTab('inventory')">
-          Inventory
+        Inventory
           <div class="ui small teal label">0</div>
         </a>-->
-        <a class="item" :class="{'active' : active_tab === 'auctions' }" @click="changeTab('auctions')">
-          Auctions
-        </a>
         <a class="item" :class="{'active' : active_tab == 'history' }" @click="changeTab('history')">
           History
-          <div class="ui small teal label">{{won_history.length}}</div>
+          <div class="ui small red label" v-if="unread > 0">{{unread}}</div>
+        </a>
+        <a class="item" :class="{'active' : active_tab === 'auctions' }" @click="changeTab('auctions')">
+          Auctions
         </a>
       </div>
       <div class="right menu">
@@ -103,11 +103,19 @@ export default {
       active_tab: state => state.tabs.active,
       won_history: state => state.history.won,
       autobuy: state => state.profile.autobuy,
-      inventory: state => state.profile.inventory
+      inventory: state => state.profile.inventory,
+      unread: state => state.history.unread
     },
     actions: {
       changeTab (store, tab) {
         store.dispatch(types.TAB_CHANGE, tab)
+
+        if (tab === 'history') {
+          this.clearUnread()
+        }
+      },
+      clearUnread (store) {
+        store.dispatch(types.HISTORY_CLEAR_UNREAD)
       },
       toggleAutobuy (store) {
         store.dispatch(types.PROFILE_SET_AUTOBUY, !this.autobuy)

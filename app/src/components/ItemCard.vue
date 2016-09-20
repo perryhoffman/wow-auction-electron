@@ -143,6 +143,9 @@ export default {
       },
       historyAdd (store, auction) {
         store.dispatch(types.HISTORY_ADD, auction)
+      },
+      lostHistoryAdd (store, auction) {
+        store.dispatch(types.HISTORY_LOST_ADD, auction)
       }
     }
   },
@@ -159,7 +162,7 @@ export default {
       for (let item of items) {
         let pricePer = utils.getFullAmount(item.price_buyout_per)
 
-        if (pricePer <= this.alertAmount) {
+        if (pricePer <= this.alertAmount && pricePer > 0) {
           item.alerted = true
           hasAlert = true
 
@@ -203,6 +206,10 @@ export default {
         })
         .catch((err) => {
           toastr.error(err.message)
+
+          if (err.code === 1004) {
+            this.lostHistoryAdd(auction)
+          }
         })
     }
   }

@@ -7,7 +7,9 @@
       </div>
     </div>
     <div class="items-container history-container content" v-if="active_tab === 'history'">
-      <div class="ui segment">
+      <div class="ui button" @click="clearHistory()">Clear History</div>
+      <h5>WON - {{won_history.length}}</h5>
+      <div class="ui segment auction-container">
         <div class="ui feed" v-for="won in won_history">
           <div class="event">
             <div class="content">
@@ -18,6 +20,20 @@
           </div>
         </div>
       </div>
+
+      <h5>MISSED - {{lost_history.length}}</h5>
+      <div class="ui segment auction-container">
+        <div class="ui feed" v-for="won in lost_history">
+          <div class="event">
+            <div class="content">
+              <div class="summary">
+                {{won.datetime|timeago}} - You <a class="autobought">missed</a> {{won.quantity}} x <a>{{won.item}}</a> for <gold class="padded" :amount="won.price_per"></gold> each for a total of <gold class="padded" :amount="won.price_buyout"></gold>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="items-container history-container content" v-if="active_tab === 'auctions'">
       <h5>SOLD - {{auctions.sold.length}}</h5>
@@ -54,6 +70,7 @@
 <script>
 import '../node_modules/jquery/dist/jquery.js'
 import '../node_modules/semantic-ui-css/semantic.js'
+import * as types from './vuex/mutation-types'
 import HeaderComponent from './components/Header'
 import FooterComponent from './components/Footer'
 import ItemCard from './components/ItemCard'
@@ -71,7 +88,13 @@ export default {
       tracked_items: state => state.tracker.tracked_items,
       active_tab: state => state.tabs.active,
       won_history: state => state.history.won,
+      lost_history: state => state.history.lost,
       auctions: state => state.auctions
+    },
+    actions: {
+      clearHistory (store) {
+        store.dispatch(types.HISTORY_CLEAR)
+      }
     }
   }
 }

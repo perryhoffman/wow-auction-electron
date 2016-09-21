@@ -83,6 +83,17 @@ export default {
       return scapedData.data
     })
   },
+  claim: () => {
+  },
+  get_auctions: () => {
+    return $.ajax({
+      url: API_BASE_URL + 'auctions',
+      method: 'GET'
+    }).then((html) => {
+      let scapedData = scraper.auctions(html)
+      return scapedData.data
+    })
+  },
   logout: () => {
     return $.get('https://us.battle.net/wow/en/vault/character/auction/browse?logout')
   }

@@ -1,5 +1,5 @@
-const AUDIO_COIN = new window.Audio('/static/coin.ogg')
-const AUDIO_ALERT = new window.Audio('/static/alert.ogg')
+const AUDIO_COIN = new window.Audio('electron://static/coin.ogg')
+const AUDIO_ALERT = new window.Audio('electron://static/alert.ogg')
 
 export default {
   extractMoney (amount) {

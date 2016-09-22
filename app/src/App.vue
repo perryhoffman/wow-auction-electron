@@ -75,6 +75,7 @@ import HeaderComponent from './components/Header'
 import FooterComponent from './components/Footer'
 import ItemCard from './components/ItemCard'
 import Gold from './components/Gold'
+import AutoSell from './services/autosell'
 
 export default {
   components: {
@@ -83,13 +84,19 @@ export default {
     ItemCard,
     Gold
   },
+  ready () {
+    this.AutoSell = new AutoSell()
+
+    console.log('TRACKED ITEMS ', this.tracked_items)
+  },
   vuex: {
     getters: {
       tracked_items: state => state.tracker.tracked_items,
       active_tab: state => state.tabs.active,
       won_history: state => state.history.won,
       lost_history: state => state.history.lost,
-      auctions: state => state.auctions
+      auctions: state => state.auctions,
+      autosell: state => state.autosell
     },
     actions: {
       clearHistory (store) {

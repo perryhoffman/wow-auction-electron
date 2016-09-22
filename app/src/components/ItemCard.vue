@@ -28,6 +28,9 @@
       </h5>
     </div>
     <div class="right menu">
+      <a class="ui icon item" @click="openAutoSellModal()">
+        <i class="money icon inverted"></i>
+      </a>
       <a class="ui icon item" @click="openInventoryModal()">
         <i class="cart icon inverted"></i>
       </a>
@@ -60,6 +63,7 @@
 
   <item-alert-modal v-ref:itemAlertModal :index="index"></item-alert-modal>
   <sell-inventory-modal v-ref:sellInventoryModal :index="index" :lowest="lowestPricePer"></sell-inventory-modal>
+  <auto-sell-modal v-ref:autoSellModal :index="index" :item="item"></auto-sell-modal>
 </div>
 </template>
 
@@ -72,12 +76,14 @@ import utils from '../services/utils'
 import toastr from 'toastr'
 import ItemAlertModal from './modals/ItemAlertModal'
 import SellInventoryModal from './modals/SellInventoryModal'
+import AutoSellModal from './modals/AutoSellModal'
 
 export default {
   components: {
     Gold,
     ItemAlertModal,
-    SellInventoryModal
+    SellInventoryModal,
+    AutoSellModal
   },
   data () {
     return {
@@ -146,6 +152,9 @@ export default {
       },
       lostHistoryAdd (store, auction) {
         store.dispatch(types.HISTORY_LOST_ADD, auction)
+      },
+      updateItemLowestPrice (store, id, price) {
+        store.dispatch(types.TRACKER_UPDATE_PRICE, id, price)
       }
     }
   },
@@ -155,6 +164,9 @@ export default {
     },
     openInventoryModal () {
       this.$refs.sellinventorymodal.open()
+    },
+    openAutoSellModal () {
+      this.$refs.autosellmodal.open()
     },
     checkAlerts (items) {
       let hasAlert = false
@@ -185,6 +197,10 @@ export default {
           })
 
           this.auctions = auctions
+
+          if (this.auctions.length) {
+            this.updateItemLowestPrice(this.item.id, {lowest_price_per: this.auctions[0].price_per})
+          }
 
           if (typeof this.alertAmount === 'number') {
             this.checkAlerts(this.auctions)

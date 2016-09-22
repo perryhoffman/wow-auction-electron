@@ -7,6 +7,7 @@ import tracker from './modules/tracker'
 import history from './modules/history'
 import tabs from './modules/tabs'
 import auctions from './modules/auctions'
+import autosell from './modules/autosell'
 import storage from '../services/storage'
 // import * as types from './mutation-types'
 
@@ -27,7 +28,8 @@ export default new Vuex.Store({
     profile,
     tracker,
     history,
-    tabs
+    tabs,
+    autosell
   },
   plugins: [saveStatePlugin]
 })

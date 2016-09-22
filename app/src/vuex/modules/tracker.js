@@ -3,7 +3,8 @@ import storage from '../../services/storage'
 import {
   TRACKER_ADD_ITEM,
   TRACKER_REMOVE_ITEM,
-  TRACKER_UPDATE_ALERT
+  TRACKER_UPDATE_ALERT,
+  TRACKER_UPDATE_PRICE
 } from '../mutation-types'
 
 const state = Object.assign({
@@ -19,6 +20,13 @@ const mutations = {
   },
   [TRACKER_UPDATE_ALERT] (state, index, update) {
     Object.assign(state.tracked_items[index], update)
+  },
+  [TRACKER_UPDATE_PRICE] (state, id, update) {
+    state.tracked_items.forEach(item => {
+      if (item.id === id) {
+        Object.assign(item, update)
+      }
+    })
   }
 }
 
